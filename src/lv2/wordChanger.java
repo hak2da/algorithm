@@ -1,11 +1,13 @@
 package lv2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
 public class wordChanger {
 	
 	public static Boolean res = false;
+	public static ArrayList arr = new ArrayList();
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -41,7 +43,7 @@ public class wordChanger {
         	return 0;
         }
         
-        result = findTarget(begin,target,words, 0);
+        result = findTarget(begin,target,words, 0, new ArrayList());
         
         System.out.println("result = "+result);
         
@@ -49,10 +51,12 @@ public class wordChanger {
         return result;
     }
 
-	private static int findTarget(String begin, String target, String[] words , int result) {
+	private static int findTarget(String begin, String target, String[] words , int result ,ArrayList history) {
 
 		for (int i = 0; i < words.length; i++) {
 			String next= words[i];
+			
+//			System.out.println("hi");
 			
 			//next가 target과 동일하면 정답 반환
 			
@@ -62,6 +66,8 @@ public class wordChanger {
 				if(next.equals(target)) {
 					result++;
 					System.out.println("result "+result);
+					
+					System.out.println("history is ="+history+" "+next);
 					
 					res =true;
 //					return ++result;
@@ -73,6 +79,7 @@ public class wordChanger {
 			
 				int del =i;
 				//배열 재생성
+				history.add(next);
 				String[] newArray = IntStream.range(0, words.length)
 	                    .filter(i2 -> i2 != del)
 	                    .mapToObj(i2 -> words[i2])
@@ -81,12 +88,20 @@ public class wordChanger {
 				
 //				System.out.println(Arrays.toString(newArray) );
 				System.out.println("next = "+next+"\ttarget = "+target);
-				result = findTarget(next,target,newArray,++result);
 				
-				if(res) {
-					return result;
-//					break;
-				}
+				result = findTarget(next,target,newArray,++result , history);
+				
+//				if(res) {
+//					res=false;
+//					return result;
+//				}else {
+//					return -1;
+//				}
+				
+//				if(res) {
+//					return result;
+////					break;
+//				}
 			}
 		}
 		
